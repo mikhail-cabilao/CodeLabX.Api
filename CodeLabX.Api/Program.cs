@@ -1,3 +1,4 @@
+using CodeLabX.Bootstrap;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,7 +14,7 @@ namespace CodeLabX.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            Bootstrapping.InitializeHostBuilder(args, CreateHostBuilder);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
