@@ -22,29 +22,10 @@ namespace CodeLabX.Api.Controllers
 
         [HttpGet]
         [EnableQuery()]
-        public async Task<IEnumerable<Notebook>> Get()
+        public async Task<IEnumerable<Notebook>> Get(ODataQueryOptions dataQueryOptions)
         {
-            //notebookService.ExecuteStordProc("GetNotes");
-            var test = await notebookService.GetData("exec GetNotes");
-            return new List<Notebook>
-            {
-                new Notebook { Name = "Test1" },
-                new Notebook { Name = "Test2" }
-            };
+            return await notebookService.GetNotes();
         }
-
-        [EnableQuery]
-        public IActionResult Get(int key)
-        {
-            return Ok(new Notebook { Name = "Test" });
-        }
-
-        //[HttpGet]
-        //[EnableQuery()]
-        //public Notebook Get(int id)
-        //{
-        //    return new Notebook { Name = "Test1" };
-        //}
 
         [HttpPost]
         public async Task<bool> Post([FromBody] string name)

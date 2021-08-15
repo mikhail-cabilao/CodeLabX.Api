@@ -1,10 +1,6 @@
 ﻿using CodeLabX.EntityFramework.Extensions;
 using CodeLabX.EntityFramework.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,11 +16,15 @@ namespace CodeLabX.Api.Services
         public async Task Create(Models.Dictionary dictinoary)
         {
             await _repository.AddAsync(dictinoary);
+            await _repository.SaveChangesAsync();
         }
 
-        public async Task Update(Models.Dictionary dictinoary)
+        public async Task Update(long id, Models.Dictionary dictinoary)
         {
-            await _repository.UpdateAsync(dictinoary);
+            var dic = await _repository.GetAsync<Models.Dictionary>();
+            var result = await dictinoary.ResolveEntity(dic.ToList().FirstOrDefault(d => d.Id == id));
+            await _repository.UpdateAsync(result);
+            await _repository.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Models.Dictionary>> GetDictionaries()

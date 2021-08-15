@@ -1,6 +1,7 @@
 ﻿using CodeLabX.Api.Services;
 using CodeLabX.EntityFramework.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Formatter;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Attributes;
 using System;
@@ -21,7 +22,6 @@ namespace CodeLabX.Api.Controllers
             _dictionaryService = dictionaryService;
         }
 
-        [HttpGet]
         [EnableQuery()]
         public async Task<IEnumerable<Models.Dictionary>> Get(ODataQueryOptions options)
         {
@@ -31,15 +31,15 @@ namespace CodeLabX.Api.Controllers
             return await _dictionaryService.GetDictionaries();
         }
 
-        [HttpGet]
         [EnableQuery()]
-        public async Task<IEnumerable<Models.Dictionary>> Get(int key)
+        public async Task<IEnumerable<Models.Dictionary>> Get([FromODataUri] long key, ODataQueryOptions options)
         {
-            var result = await _dictionaryService.GetDictionaries();
-            return result.ToList();
+            if (!string.IsNullOrWhiteSpace(options.SelectExpand?.RawExpand))
+                return (await _dictionaryService.GetDictionaries(options.SelectExpand.RawExpand)).ToList().Where(d => d.Id == key);
+
+            return (await _dictionaryService.GetDictionaries()).ToList().Where(d => d.Id == key);
         }
 
-        [HttpPost]
         public async Task<bool> Post([FromBody] Models.Dictionary dictionary)
         {
             await _dictionaryService.Create(dictionary);
@@ -47,10 +47,9 @@ namespace CodeLabX.Api.Controllers
             return true;
         }
 
-        [HttpPut]
-        public async Task<bool> Put(int id, [FromBody] Models.Dictionary dictionary)
+        public async Task<bool> Put([FromODataUri] long key, [FromBody] Models.Dictionary dictionary)
         {
-            await _dictionaryService.Update(dictionary);
+            await _dictionaryService.Update(key, dictionary);
 
             return true;
         }

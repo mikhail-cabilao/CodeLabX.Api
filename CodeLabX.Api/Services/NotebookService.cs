@@ -3,6 +3,7 @@ using CodeLabX.Api.Models;
 using CodeLabX.DependencyInjection;
 using CodeLabX.EntityFramework.Repository;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,11 +16,13 @@ namespace CodeLabX.Api.Services
     {
         private readonly IRepository repository;
         private readonly ISqlDatabase sqlDatabase;
+        private readonly string connectionString;
 
         public NotebookService(IRepository repository, ISqlDatabase sqlDatabase)
         {
             this.repository = repository;
             this.sqlDatabase = sqlDatabase;
+            this.connectionString = this.repository.DataContext().Database.GetDbConnection().ConnectionString;
         }
 
         public async Task AddAsync(string name)
@@ -28,9 +31,10 @@ namespace CodeLabX.Api.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<DataTable> GetNotes()
+        public async Task<IEnumerable<Notebook>> GetNotes()
         {
-            return await sqlDatabase.GetData("select * from Notebook");
+            var result = await sqlDatabase.ExecuteStordProcQuery<Notebook>("GetNotes");
+            return result;
         }
 
         public async Task<DataTable> GetData(string query)
@@ -38,7 +42,7 @@ namespace CodeLabX.Api.Services
             var dataTable = new DataTable();
             try
             {
-                using (var con = new SqlConnection(Configuration.ConnectionString))
+                using (var con = new SqlConnection(connectionString))
                 {
                     var command = new SqlCommand(query, con);
                     con.Open();
@@ -62,7 +66,7 @@ namespace CodeLabX.Api.Services
 
         public void ExecuteStordProc(string stordProc, Action<object> callback = null, List<SqlParameter> sqlParameters = null)
         {
-            using var con = new SqlConnection(Configuration.ConnectionString);
+            using var con = new SqlConnection(connectionString);
             con.Open();
 
             using var command = new SqlCommand(stordProc, con);

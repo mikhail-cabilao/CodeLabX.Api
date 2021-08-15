@@ -16,13 +16,13 @@ namespace CodeLabX.Api.Models
         [Key]
         public long Id { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset ModifiedData { get; set; }
+        public DateTimeOffset ModifiedDate { get; set; }
 
         public string Name { get; set; }
         public string Definition { get; set; }
 
         [ForeignKey(nameof(DictionaryCategory))]
-        public long CategoryId { get; set; }
+        public long? CategoryId { get; set; }
         [AllowExpand]
         public DictionaryCategory Category { get; set; }
     }

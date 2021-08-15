@@ -4,14 +4,16 @@ using CodeLabX.EntityFramework.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CodeLabX.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210613152301_clx21118264-441d-46bb-8ab9-0d3eadbea35a")]
+    partial class clx21118264441d46bb8ab90d3eadbea35a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace CodeLabX.Api.Migrations
                     b.Property<string>("Definition")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("ModifiedDate")
+                    b.Property<DateTimeOffset>("ModifiedData")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
@@ -64,7 +66,7 @@ namespace CodeLabX.Api.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("ModifiedDate")
+                    b.Property<DateTimeOffset>("ModifiedData")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
@@ -91,7 +93,7 @@ namespace CodeLabX.Api.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("ModifiedDate")
+                    b.Property<DateTimeOffset>("ModifiedData")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
@@ -115,7 +117,7 @@ namespace CodeLabX.Api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset>("ModifiedDate")
+                    b.Property<DateTimeOffset>("ModifiedData")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
