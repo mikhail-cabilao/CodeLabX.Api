@@ -31,8 +31,8 @@ namespace CodeLabX.Api
             services.AddControllers();
             services.AddScopes();
 
-            WrapperInject.ServicesInject(services);
-            WrapperInject.DbContextInject(services, Configuration["ConnectionStrings:Database"], b => b.MigrationsAssembly("CodeLabX.Api"));
+            services.AddXproServices();
+            services.AddXproDataContext(Configuration["ConnectionStrings:Database"], b => b.MigrationsAssembly("CodeLabX.Api"));
 
             services.AddControllers().AddNewtonsoftJson(options =>
             {
